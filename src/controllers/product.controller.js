@@ -11,22 +11,60 @@ cloudinary.config({
 
 
 export const registerProduct = async (req, res) => {
-    const {
-        idProducto, 
-        nombreProducto, 
-        universoFilm,
-        tipoProducto, 
-        tipo, 
-        tamano,
-        color
-        } = req.body
-    const { path } = req.file
-    try {
-        const {url} = await cloudinary.uploader.upload(path, {quality: 50})
-        await fse.unlink( path )
-        await Producto.create({ idProducto, nombreProducto, universoFilm, tipoProducto, imagenProducto: url, tipo, tamano, color })
-        return res.status(200).json({ status: 200})
-    } catch (error) {
-        return res.status(500).json({ err: error })
+    const { role } = req.datos
+    console.log(role)
+    if(role == 'admin') {
+        const {
+            idProducto, 
+            nombreProducto, 
+            universoFilm,
+            tipoProducto, 
+            tipo, 
+            tamano,
+            color,
+            sexo,
+            marca,
+            cantidadPaginas,
+            generoComic,
+            editorial,
+            } = req.body
+        const { path } = req.file
+        try {
+            const {url} = await cloudinary.uploader.upload(path, {quality: 50})
+            await fse.unlink( path )
+            await Producto.create({ 
+                idProducto, 
+                nombreProducto, 
+                universoFilm, 
+                tipoProducto, 
+                imagenProducto: url, 
+                tipo, 
+                tamano, 
+                color, 
+                sexo,
+                marca,
+                cantidadPaginas,
+                generoComic,
+                editorial, })
+            return res.status(200).json({ status: 200})
+        } catch (error) {
+            return res.status(500).json({ err: error })
+        }
+    } else {
+        return res.status(401).json({ status: 401 })
+    }
+}
+
+export const getProducto = async (req, res) => {
+    const { role } = req.datos
+    if(role == 'admin') {
+        try {
+            const resp = await Producto.find()
+            return res.status(200).json(resp)
+        } catch (error) {
+            return res.status(500).json({ err: error })
+        }
+    } else {
+        return res.status(401).json({ status: 401 })
     }
 }

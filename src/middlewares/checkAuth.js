@@ -12,11 +12,9 @@ const checkAuth = async (req, res, next) => {
         try {
             token = req.headers.authorization.split(' ')[1]
             const {id} = jwt.verify(token, process.env.SECRET_KEY)
-            console.log(id)
             const usuario = await Usuarios.findOne({_id: {
                 $eq: id
             }}).select('-password -createdAt -updatedAt -email -fullName') 
-            console.log(usuario)
             req.datos = usuario
             next()
         } catch (error) {
