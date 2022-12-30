@@ -1,4 +1,4 @@
-import { Usuarios } from "../models/users.model.js"
+import { Usuarios } from "../models/index.js"
 import bcrypt from 'bcryptjs'
 import { generateJWT } from "../helpers/generateJWT.js"
 
@@ -41,6 +41,16 @@ const userLogin = async (req, res) => {
     }
 }
 
+const getUser = async (req, res) => {
+    const {role: roleUser} = req.datos
+    if(roleUser === 'admin') {
+        const data = await Usuarios.find()
+        return res.status(200).json(data)
+    } else {
+        return res.status(404).json({msg: 'no tienes autorizacion'})
+    }
+}
+
 export {
-    userLogin, userPublicRegister, userPrivateRegister
+    userLogin, userPublicRegister, userPrivateRegister, getUser
 }

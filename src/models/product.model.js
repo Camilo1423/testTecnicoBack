@@ -62,39 +62,7 @@ const productSchema = new Schema(
             type: String,
             require: false,
             default: '',
-        },
-        entrada: [
-            {
-                cantidad: {
-                    type: Number,
-                    require: false,
-                },
-                valorUnd: {
-                    type: Number,
-                    require: false
-                },
-                valorTo: {
-                    type: Number,
-                    require: false
-                }
-            }
-        ],
-        salida: [
-            {
-                cantidad: {
-                    type: Number,
-                    require: false,
-                },
-                valorUnd: {
-                    type: Number,
-                    require: false
-                },
-                valorTo: {
-                    type: Number,
-                    require: false
-                }
-            }
-        ]
+        }
     },
     {
         timestamps: true,
